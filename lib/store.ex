@@ -1,0 +1,2 @@
+defmodule Store do
+end
