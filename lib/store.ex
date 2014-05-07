@@ -6,6 +6,7 @@ defmodule Store do
   with behaviours and hot code upgrades. The commits are carefully
   arranged in small easy-to-understand steps.
   """
+  use Application
   use GenServer.Behaviour
 
   ##############################################################################
