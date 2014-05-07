@@ -42,5 +42,34 @@ defmodule Store do
       {:error, {:already_started, pid}} -> {:ok, pid}
     end
   end
+
+  ############################################################################## 
+  # GenServer Callbacks
+
+  # synchronous - wait for a reply
+  def handle_call( {:get, key}, _from, dict) do
+    { :reply, dict[key] , dict }
+  end
+
+  def handle_call(request, from, config) do
+    # Call the default implementation from GenServer.Behaviour
+    super(request, from, config)
+  end
+
+  # asynchronous - no waiting
+  def handle_cast({ :put, key, value }, dict) do
+    dict = HashDict.put(dict, key, value)
+    { :noreply, dict }
+  end
+
+  # required for our Store.stop function
+  def handle_cast( {:stop} , state) do
+    { :stop, :normal, state }
+  end
+
+  # not strictly required but if we replace the hashdict setup
+  # with something fancier in future that *does* need termination
+  def terminate(:normal, _state) do
+    :ok
   end
 end
