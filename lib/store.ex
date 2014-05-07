@@ -51,6 +51,15 @@ defmodule Store do
   end
 
   @doc """
+  Deletes a key/value from the Store.
+  Takes key parameter.
+  Returns :ok.
+  """
+  def delete(key) do
+    :gen_server.cast(__MODULE__, { :delete, key})
+  end
+
+  @doc """
   Retrieves the GenServer internal state.
   No parameters.
   Returns status.
@@ -86,6 +95,11 @@ defmodule Store do
   # asynchronous - no waiting
   def handle_cast({ :put, key, value }, dict) do
     dict = HashDict.put(dict, key, value)
+    { :noreply, dict }
+  end
+
+  def handle_cast({ :delete, key}, dict) do
+    dict = HashDict.delete(dict, key)
     { :noreply, dict }
   end
 
