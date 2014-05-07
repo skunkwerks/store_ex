@@ -32,6 +32,33 @@ defmodule Store do
     end
   end
 
+  @doc """
+  Puts a key/value into the Store.
+  Takes key, value parameters.
+  Returns :ok or {:error, reason} if unable to continue.
+  """
+  def put(key, value) do
+    :gen_server.cast(__MODULE__, { :put, key, value})
+  end
+
+  @doc """
+  Gets a key's corresponding value from the Store.
+  Takes key parameter.
+  Returns value or :nil if key is not present.
+  """
+  def get(key) do
+    :gen_server.call(__MODULE__, { :get, key})
+  end
+
+  @doc """
+  Retrieves the GenServer internal state.
+  No parameters.
+  Returns status.
+  """
+  def introspect do
+    :sys.get_status __MODULE__
+  end
+
   ##############################################################################
   # Application Callbacks
 
